@@ -32,3 +32,12 @@ $ flask run
 ## Testing
 
 ## Configuration
+
+## Data sources
+
+The data for this application comes from the official FPL API:
+base: https://fantasy.premierleague.com/api/
+static data: https://fantasy.premierleague.com/api/bootstrap-static/
+fixture data: https://fantasy.premierleague.com/api/fixtures/
+gameweek data: https://fantasy.premierleague.com/api/event/{gameweek_number}/live/
+detailed player stats: https://fantasy.premierleague.com/api/element-summary/{player_id}/

@@ -45,7 +45,7 @@ class Team:
 
     @property
     def short_name(self) -> str:
-        return self._id
+        return self._short_name
     
     @property
     def code(self) -> int:
