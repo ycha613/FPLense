@@ -23,7 +23,7 @@ $ pip install -r requirements.txt
 
 ## Execution
 
-**Running theapplication**
+**Running the application**
 From the *project directory* and within the activated virtual environment:
 ````shell
 $ flask run
