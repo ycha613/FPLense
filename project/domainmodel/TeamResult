@@ -1,0 +1,78 @@
+from __future__ import annotations
+import Team
+import PlayerResult
+
+class TeamResult:
+    def __init__(self, team: Team.Team, opponent: Team.Team, home: bool,
+                 goals_scored: int, goals_conceded: int, xg: float,
+                 xgc: float, date: str):
+        self._team = team
+        self._opponent = opponent
+        self._home = home
+        self._date = date
+
+        self._goals_scored = goals_scored
+        self._goals_conceded = goals_conceded
+        self._xg = xg
+        self._xgc = xgc
+        
+        if self._goals_scored > self._goals_conceded:
+            self._result = "Win"
+            self._points_gained = 3
+        elif self._goals_scored < self._goals_conceded:
+            self._result = "Loss"
+            self._points_gained = 0
+        else:
+            self._result = "Draw"
+            self._points_gained = 1
+
+        self._player_results = list() # one to many with PlayerResult
+
+        # down the line add something for yellow cards and red cards
+
+    @property
+    def team(self) -> Team.Team:
+        return self._team
+    
+    @property
+    def opponent(self) -> Team.Team:
+        return self._opponent
+    
+    @property
+    def home(self) -> bool:
+        return self._home
+    
+    @property
+    def date(self) -> str:
+        return self._date
+    
+    @property
+    def goals_scored(self) -> int:
+        return self._goals_scored
+    
+    @property
+    def goals_conceded(self) -> int:
+        return self._goals_conceded
+    
+    @property
+    def xg(self) -> float:
+        return self._xg
+    
+    @property
+    def xgc(self) -> float:
+        return self._xgc
+    
+    @property
+    def result(self) -> str:
+        return self._result
+    
+    @property
+    def points_gained(self) -> int:
+        return self._points_gained
+    
+    @property
+    def player_results(self) -> list[PlayerResult.PlayerResult]:
+        return self._player_results
+    
+    def add_player_result(self, player_result: PlayerResult.PlayerResult):
+        self._player_results.append(player_result)

@@ -1,22 +1,18 @@
 from __future__ import annotations
+import Player
+import TeamResult
+import TeamFixture
 
 class Team:
-    def __init__(self, id: int, name: str, short_name: str, strength: int, code: int,
-                 strength_overall_home: int, strength_overall_away: int, strength_attack_home: int,
-                 strength_attack_away: int, strength_defence_home: int, strength_defence_away: int):
+    def __init__(self, id: int, name: str, short_name: str, strength: int, code: int):
         self._id = id
         self._name = name
         self._short_name = short_name
         self._strength = strength
         self._code = code
-
-        # strength
-        self._strength_overall_home = strength_overall_home
-        self._strength_overall_away = strength_overall_away
-        self._strength_attack_home = strength_attack_home
-        self._strength_attack_away = strength_attack_away
-        self._strength_defence_home = strength_defence_home
-        self._strength_defence_away = strength_defence_away
+        self._players = list() # one to many with Player
+        self._results = list() # one to many with TeamResult
+        self._fixtures = list() # one to many with TeamFixture
 
         # match stats
         self._played = 0
@@ -30,10 +26,6 @@ class Team:
         self._gf = 0
         self._ga = 0
         self._gd = 0
-
-        # results and fixtures lists
-        self._results = list()
-        self._fixtures = list()
 
     @property
     def id(self) -> int:
@@ -51,35 +43,18 @@ class Team:
     def code(self) -> int:
         return self._code
     
+    @property
+    def players(self) -> list[Player.Player]:
+        return self._players
+    
+    def add_player(self, player: Player.Player):
+        self._players.append(player)
+    
     # strength getters
 
     @property
     def strength(self) -> int:
         return self._strength
-    
-    @property
-    def strength_overall_home(self) -> int:
-        return self._strength_overall_home
-    
-    @property
-    def strength_overall_away(self) -> int:
-        return self._strength_overall_away
-    
-    @property
-    def strength_attack_home(self) -> int:
-        return self._strength_attack_home
-    
-    @property
-    def strength_attack_away(self) -> int:
-        return self._strength_attack_away
-    
-    @property
-    def strength_defence_home(self) -> int:
-        return self._strength_defence_home
-    
-    @property
-    def strength_defence_away(self) -> int:
-        return self._strength_defence_away
     
     # match stats getters and setters
 
@@ -160,18 +135,47 @@ class Team:
     # results and fixtures getters and add methods
 
     @property
-    def results(self) -> []:
+    def results(self) -> list[TeamResult.TeamResult]:
         return self._results
     
-    def add_result(self):
-        pass
+    def add_result(self, new_result: TeamResult.TeamResult):
+        self._results.append(new_result)
+
+        # update goals and xg
+        self._gf += new_result.goals_scored
+        self._ga += new_result.goals_conceded
+        self._gd = self._gf - self._ga
+
+        # update wins/losses, played, points
+        self._played += 1
+        if new_result.result == "Win":
+            self._wins += 1
+            self._points += 3
+        elif new_result.result == "Loss":
+            self._losses += 1
+        else:
+            self._draws += 1
+            self._points += 1
+
+        # update form
+        total = 0
+        if len(self._results) >= 5:
+            for result in self._results[-5:]:
+                total += result.points_gained
+            form = total / 5
+        else:
+            i = 0
+            for result in self._results:
+                i += 1
+                total += result.points_gained
+            form = total / i
     
     @property
-    def fixtures(self) -> []:
+    def fixtures(self) -> list[TeamFixture.TeamFixture]:
         return self._fixtures
     
-    def add_fixture(self):
-        pass
+    def add_fixture(self, new_fixture: TeamFixture.TeamFixture):
+        self._fixtures.append(new_fixture)
 
     # additional methods
 
